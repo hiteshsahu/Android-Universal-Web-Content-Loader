@@ -1,8 +1,8 @@
 # Android-Universal-Web-Content-Loader(UWCL)
-Drop this fragment in your UI package and load web contents in your application just in a single line.
+Drop this fragment in your UI package and load web contents in your application with the help of just single line of code.
 This Fragment class supports all type of web content & can be used in many scenarios such as :-
 
-1) you can embed youtube playlist in your App. UniversalWebContentLoader(UWCL) allow user to play Videos in portrait mode as well.
+1) you can embed youtube playlist in your App. The UniversalWebContentLoader(UWCL) allow user to play Videos in portrait mode as well.
 
 				getSupportFragmentManager()
 						.beginTransaction()
@@ -39,8 +39,12 @@ This Fragment class supports all type of web content & can be used in many scena
 																.getText()
 																.toString(),
 														true)).commit();
+														
+Attached sample will demostarte some of above use cases :-
 
-
+![Alt text](https://github.com/hiteshsahu/Android-Universal-Web-Content-Loader/blob/master/screenshots/home_page.png "Sample Home")
+![Alt text](https://github.com/hiteshsahu/Android-Universal-Web-Content-Loader/blob/master/screenshots/youtube.png "YouTube Example")
+![Alt text](https://github.com/hiteshsahu/Android-Universal-Web-Content-Loader/blob/master/screenshots/payumoney.png "payment Gateway Example")
 
 Copyright 2015 Hitesh Kumar Sahu
 

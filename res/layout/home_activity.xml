@@ -21,9 +21,9 @@
             android:orientation="vertical" >
 
             <TextView
-                android:gravity="center_horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
                 android:text="@string/app_name"
                 android:textColor="#fff"
                 android:textSize="25sp" />
@@ -55,6 +55,18 @@
                 android:layout_marginTop="25dp"
                 android:background="#ff669900"
                 android:text="PayUMoney Sample"
+                android:textColor="#FFF"
+                android:textSize="20sp" />
+
+            <Button
+                android:id="@+id/pdf_demo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="25dp"
+                android:background="#ff669900"
+                android:text="PDF Sample"
                 android:textColor="#FFF"
                 android:textSize="20sp" />
 

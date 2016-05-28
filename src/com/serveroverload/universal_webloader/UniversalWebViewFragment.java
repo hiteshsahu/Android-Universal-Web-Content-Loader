@@ -1,48 +1,69 @@
 package com.serveroverload.universal_webloader;
 
-import com.serveroverload.youtube_webview.R;
-
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnKeyListener;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceError;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.serveroverload.youtube_webview.R;
 
 //No we dont give damn about Eclair or Cupcake
 @SuppressLint("NewApi")
 public class UniversalWebViewFragment extends Fragment {
+
 	public static final String WEB_URL_TO_LOAD = "webURLToLoad";
 
 	private static final String GOOGLE_SERACH_URL = "https://www.google.com/search?q=";
-	
+
 	private WebView webView;
 	private FrameLayout customViewContainer;
 	private WebChromeClient.CustomViewCallback customViewCallback;
 	private View mCustomView;
-	private myWebChromeClient mWebChromeClient;
-	private myWebViewClient mWebViewClient;
+	private MyWebChromeClient mWebChromeClient;
+	private MyWebViewClient mWebViewClient;
+	private TextView errorMessage;
+
+	private int webViewPreviousState;
+	private final int PAGE_STARTED = 0x1;
+	private final int PAGE_REDIRECTED = 0x2;
+
+	private View rootView;
+
+	private String urlToLoad = GOOGLE_SERACH_URL;
 
 	public static UniversalWebViewFragment newInstance(String webUrl,
 			boolean serachOnWeb) {
 		Bundle bdl = new Bundle();
 		if (serachOnWeb) {
-			// serach on google for query
-			bdl.putString(WEB_URL_TO_LOAD, GOOGLE_SERACH_URL +webUrl);
+
+			// Search on google for query
+			bdl.putString(WEB_URL_TO_LOAD, GOOGLE_SERACH_URL + webUrl);
 		} else {
 
-			// seimply load url
+			// simply load url
 			bdl.putString(WEB_URL_TO_LOAD, webUrl);
 		}
 		UniversalWebViewFragment newInstance = new UniversalWebViewFragment();
@@ -57,79 +78,86 @@ public class UniversalWebViewFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.universal_web_view,
-				container, false);
+		rootView = inflater.inflate(R.layout.universal_web_view, container,
+				false);
 
 		if (null != getArguments()
 				&& null != getArguments().getString(WEB_URL_TO_LOAD)) {
-			customViewContainer = (FrameLayout) rootView
-					.findViewById(R.id.customViewContainer);
-			webView = (WebView) rootView.findViewById(R.id.webView);
 
-			mWebViewClient = new myWebViewClient();
-			webView.setWebViewClient(mWebViewClient);
+			urlToLoad = getArguments().getString(WEB_URL_TO_LOAD);
 
-			mWebChromeClient = new myWebChromeClient();
-			webView.setWebChromeClient(mWebChromeClient);
-			webView.getSettings().setJavaScriptEnabled(true);
-			
-			//Important for PayUMoney
-			webView.getSettings().setDomStorageEnabled(true);
-			
-			webView.getSettings().setAppCacheEnabled(true);
-			webView.getSettings().setBuiltInZoomControls(true);
-			webView.getSettings().setSaveFormData(true);
-			webView.loadUrl(getArguments().getString(WEB_URL_TO_LOAD));
-			//webView.requestFocus();
-
-			
-			//Handle Back keyPress
-			rootView.setFocusableInTouchMode(true);
-			rootView.requestFocus();
-			rootView.setOnKeyListener(new OnKeyListener() {
-
-				@Override
-				public boolean onKey(View v, int keyCode, KeyEvent event) {
-
-					if (keyCode == KeyEvent.KEYCODE_BACK) {
-
-						if (inCustomView()) {
-							hideCustomView();
-							getActivity().getSupportFragmentManager()
-									.popBackStack();
-
-							((HomeActivity) getActivity())
-									.toggleControlPanel(true);
-
-							return true;
-						}
-
-						if ((mCustomView == null) && webView.canGoBack()) {
-							webView.goBack();
-
-							getActivity().getSupportFragmentManager()
-									.popBackStack();
-
-							((HomeActivity) getActivity())
-									.toggleControlPanel(true);
-							return true;
-
-						}
-					}
-					// return super.onKeyDown(keyCode, event);
-					return true;
-				}
-			});
 		}
+
+		customViewContainer = (FrameLayout) rootView
+				.findViewById(R.id.customViewContainer);
+		webView = (WebView) rootView.findViewById(R.id.webView);
+
+		errorMessage = (TextView) rootView.findViewById(R.id.error_message);
+
+		rootView.findViewById(R.id.alert_root).setOnTouchListener(
+				new View.OnTouchListener() {
+					public boolean onTouch(View v, MotionEvent event) {
+
+						loadWebUrl(urlToLoad);
+
+						return true;
+					}
+				});
+
+		mWebViewClient = new MyWebViewClient();
+		webView.setWebViewClient(mWebViewClient);
+
+		mWebChromeClient = new MyWebChromeClient();
+		webView.setWebChromeClient(mWebChromeClient);
+		webView.getSettings().setJavaScriptEnabled(true);
+
+		// Important for PayUMoney
+		webView.getSettings().setDomStorageEnabled(true);
+
+		webView.getSettings().setAppCacheEnabled(true);
+		webView.getSettings().setBuiltInZoomControls(true);
+		webView.getSettings().setSaveFormData(true);
+
+		webView.requestFocus();
 
 		return rootView;
 	}
 
-	public boolean inCustomView() {
+	@Override
+	public void setUserVisibleHint(boolean isVisibleToUser) {
+		super.setUserVisibleHint(isVisibleToUser);
+		if (isVisibleToUser) {
+
+			loadWebUrl(urlToLoad);
+		} else {
+		}
+	}
+
+	public void loadWebUrl(String urlToLoad) {
+
+		webView.loadUrl(urlToLoad);
+
+		if (!isConnected(getActivity())) {
+
+			Toast.makeText(getActivity(), "You are offline ",
+					Toast.LENGTH_SHORT).show();
+
+			rootView.findViewById(R.id.alert_root).setVisibility(View.VISIBLE);
+			errorMessage.setText("You are Offline");
+
+		} else {
+
+			if (rootView.findViewById(R.id.alert_root).getVisibility() != View.GONE)
+				rootView.findViewById(R.id.alert_root).setVisibility(View.GONE);
+		}
+
+	}
+
+	private boolean inCustomView() {
 		return (mCustomView != null);
 	}
 
-	public void hideCustomView() {
+	private void hideCustomView() {
 		mWebChromeClient.onHideCustomView();
 	}
 
@@ -156,7 +184,7 @@ public class UniversalWebViewFragment extends Fragment {
 		}
 	}
 
-	class myWebChromeClient extends WebChromeClient {
+	class MyWebChromeClient extends WebChromeClient {
 		private View mVideoProgressView;
 
 		@Override
@@ -214,37 +242,22 @@ public class UniversalWebViewFragment extends Fragment {
 		}
 	}
 
-	class myWebViewClient extends WebViewClient {
+	class MyWebViewClient extends WebViewClient {
 
 		@Override
 		public boolean shouldOverrideUrlLoading(WebView view, String url) {
 			return super.shouldOverrideUrlLoading(view, url);
 		}
 
-		private int webViewPreviousState;
+		Dialog loadingDialog = new Dialog(getActivity());
 
-		private final int PAGE_STARTED = 0x1;
-
-		private final int PAGE_REDIRECTED = 0x2;
-
-		Dialog dialog = new Dialog(getActivity());
-
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * /* (non-Javadoc)
-		 * 
-		 * @see
-		 * android.webkit.WebViewClient#onPageStarted(android.webkit.WebView,
-		 * java.lang.String, android.graphics.Bitmap)
-		 */
 		@Override
 		public void onPageStarted(WebView view, String url, Bitmap favicon) {
 			super.onPageStarted(view, url, favicon);
 			webViewPreviousState = PAGE_STARTED;
 
-			if (dialog == null || !dialog.isShowing())
-				dialog = ProgressDialog.show(getActivity(), "",
+			if (loadingDialog == null || !loadingDialog.isShowing())
+				loadingDialog = ProgressDialog.show(getActivity(), "",
 						"Loading Please Wait", true, true,
 						new OnCancelListener() {
 
@@ -253,18 +266,76 @@ public class UniversalWebViewFragment extends Fragment {
 								// do something
 							}
 						});
+
+			loadingDialog.setCancelable(false);
+
+		}
+
+		@Override
+		public void onReceivedError(WebView view, WebResourceRequest request,
+				WebResourceError error) {
+
+			Toast.makeText(getActivity(),
+					"WebView Error" + error.getDescription(),
+					Toast.LENGTH_SHORT).show();
+
+			rootView.findViewById(R.id.alert_root).setVisibility(View.VISIBLE);
+
+			errorMessage.setText(error.getDescription());
+
+			super.onReceivedError(view, request, error);
+
+		}
+
+		@Override
+		public void onReceivedHttpError(WebView view,
+				WebResourceRequest request, WebResourceResponse errorResponse) {
+
+			Toast.makeText(getActivity(),
+					"WebView Error" + errorResponse.getReasonPhrase(),
+					Toast.LENGTH_SHORT).show();
+
+			rootView.findViewById(R.id.alert_root).setVisibility(View.VISIBLE);
+
+			errorMessage.setText(errorResponse.getReasonPhrase());
+
+			super.onReceivedHttpError(view, request, errorResponse);
 		}
 
 		@Override
 		public void onPageFinished(WebView view, String url) {
 
 			if (webViewPreviousState == PAGE_STARTED) {
-				if (null != dialog)
-					dialog.dismiss();
-				dialog = null;
+
+				if (null != loadingDialog) {
+					loadingDialog.dismiss();
+					loadingDialog = null;
+				}
+
 			}
 
 		}
+
 	}
 
+	/**
+	 * Check if there is any connectivity
+	 * 
+	 * @param context
+	 * @return is Device Connected
+	 */
+	public static boolean isConnected(Context context) {
+
+		ConnectivityManager cm = (ConnectivityManager) context
+				.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+		if (null != cm) {
+			NetworkInfo info = cm.getActiveNetworkInfo();
+
+			return (info != null && info.isConnected());
+		}
+
+		return false;
+
+	}
 }

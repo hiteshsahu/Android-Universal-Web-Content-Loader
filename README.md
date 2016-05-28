@@ -1,6 +1,21 @@
 # Android-Universal-Web-Content-Loader(UWCL)
-Drop this fragment in your UI package and load web contents in your application with the help of just single line of code.
-This Fragment class supports all type of web content & can be used in many scenarios such as :-
+
+###WHAT IS THIS :-
+
+Universal Web Content loader is Native in App brower which help developers to embed web contents in there apps with just one line of code. Web contents can we of any type - youtube playlist, Facebook page, in App Google search or payUMoney payment trannsactions.
+
+### WHEN TO USE  :- 
+
+If your app requires loading of web contents in your app and you dont want to waste your timing embedding webviews and writing webview and chrome clients.
+
+
+###HOW TO USE :-
+
+Usin this project is very simple :-
+ - Drop this fragment in your UI package along with universal_web_view.xml and video_progress.xml.
+ - Load web contents in your application with the help of just single line of code.
+ - 
+   This Fragment class supports all type of web content & can be used in many scenarios such as :-
 
 1) you can embed youtube playlist in your App. The UniversalWebContentLoader(UWCL) allow user to play Videos in portrait mode as well.
 
@@ -42,9 +57,10 @@ This Fragment class supports all type of web content & can be used in many scena
 														
 Attached sample will demostarte some of above use cases :-
 
-![Alt text](https://github.com/hiteshsahu/Android-Universal-Web-Content-Loader/blob/master/screenshots/home_page.png "Sample Home")
-![Alt text](https://github.com/hiteshsahu/Android-Universal-Web-Content-Loader/blob/master/screenshots/youtube.png "YouTube Example")
-![Alt text](https://github.com/hiteshsahu/Android-Universal-Web-Content-Loader/blob/master/screenshots/payumoney.png "payment Gateway Example")
+![Alt text](https://github.com/hiteshsahu/Android-Universal-Web-Content-Loader/blob/master/screenshots%20Eclipse/home_page.png "Sample Home")
+![Alt text](https://github.com/hiteshsahu/Android-Universal-Web-Content-Loader/blob/master/screenshots%20Eclipse/youtube.png"YouTube Example")
+![Alt text](https://github.com/hiteshsahu/Android-Universal-Web-Content-Loader/blob/master/screenshots%20Eclipse/payumoney.png "payment Gateway Example")
+![Alt text](https://github.com/hiteshsahu/Android-Universal-Web-Content-Loader/blob/master/screenshots%20Eclipse/offline.png "payment Gateway Example")
 
 Copyright 2015 Hitesh Kumar Sahu
 

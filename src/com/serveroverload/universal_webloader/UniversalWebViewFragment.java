@@ -118,19 +118,11 @@ public class UniversalWebViewFragment extends Fragment {
 		webView.getSettings().setBuiltInZoomControls(true);
 		webView.getSettings().setSaveFormData(true);
 
+		loadWebUrl(urlToLoad);
+
 		webView.requestFocus();
 
 		return rootView;
-	}
-
-	@Override
-	public void setUserVisibleHint(boolean isVisibleToUser) {
-		super.setUserVisibleHint(isVisibleToUser);
-		if (isVisibleToUser) {
-
-			loadWebUrl(urlToLoad);
-		} else {
-		}
 	}
 
 	public void loadWebUrl(String urlToLoad) {

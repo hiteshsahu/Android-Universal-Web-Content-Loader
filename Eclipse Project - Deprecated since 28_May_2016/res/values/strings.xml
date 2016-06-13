@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <string name="app_name">Universal WebView</string>
-    <string name="description">" Drop this fragment in your UI package and load any web page in your application jsut in single line. \n It supports all type of web content ,you can play YouTube in portrait mode or make payments with PayUMoney or load your Facebook page in the App. It also allow you to search contents in Google in your App."</string>
-
-</resources>

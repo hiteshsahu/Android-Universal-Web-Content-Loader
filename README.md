@@ -60,20 +60,15 @@ Attached sample will demostarte some of above use cases :-
 
 ###Android Studio Project Screenshots
 
-![Alt text](https://github.com/hiteshsahu/Android-Universal-Web-Content-Loader/blob/master/screenshots%20Android%20Studio/studio_youtube.png "YouTube Sample")
-![Alt text](https://github.com/hiteshsahu/Android-Universal-Web-Content-Loader/blob/master/screenshots%20Android%20Studio/studio_fb.png "Facebool Example")
-![Alt text](https://github.com/hiteshsahu/Android-Universal-Web-Content-Loader/blob/master/screenshots%20Android%20Studio/studio_payu.png "payment Gateway Example")
-![Alt text](https://github.com/hiteshsahu/Android-Universal-Web-Content-Loader/blob/master/screenshots%20Android%20Studio/studio_google.png "payment Google Search Example")
-![Alt text](https://github.com/hiteshsahu/Android-Universal-Web-Content-Loader/blob/master/screenshots%20Android%20Studio/studio_oofline.png "Offline Example")
+![Alt text](https://github.com/hiteshsahu/Android-Universal-Web-Content-Loader/blob/master/Art/studio_youtube.png "YouTube Sample")
+![Alt text](https://github.com/hiteshsahu/Android-Universal-Web-Content-Loader/blob/master/Art/studio_fb.png "Facebool Example")
+![Alt text](https://github.com/hiteshsahu/Android-Universal-Web-Content-Loader/blob/master/Art/studio_payu.png "payment Gateway Example")
+![Alt text](https://github.com/hiteshsahu/Android-Universal-Web-Content-Loader/blob/master/Art/studio_google.png "payment Google Search Example")
+![Alt text](https://github.com/hiteshsahu/Android-Universal-Web-Content-Loader/blob/master/Art/studio_oofline.png "Offline Example")
 
 ###Eclipse Project Screenshots
 
-Please note that I am not supporting eclipse project anymore after release of Android studio 2.1 it is till kept her for reference and soon will be deleted
-
-![Alt text](https://github.com/hiteshsahu/Android-Universal-Web-Content-Loader/blob/master/screenshots%20Eclipse/home_page.png "Sample Home")
-![Alt text](https://github.com/hiteshsahu/Android-Universal-Web-Content-Loader/blob/master/screenshots%20Eclipse/youtube.png "YouTube Example")
-![Alt text](https://github.com/hiteshsahu/Android-Universal-Web-Content-Loader/blob/master/screenshots%20Eclipse/payumoney.png "payment Gateway Example")
-![Alt text](https://github.com/hiteshsahu/Android-Universal-Web-Content-Loader/blob/master/screenshots%20Eclipse/offline.png "Offline  Example")
+Eclipse project  is depricated
 
 
 
